@@ -72,6 +72,12 @@
             top: 0;
             z-index: 10;
             backdrop-filter: blur(8px);
+            transition: transform 0.25s ease, box-shadow 0.2s ease;
+            will-change: transform;
+        }
+
+        body.header-hidden .app-header {
+            transform: translateY(-110%);
         }
 
         .header-content {
@@ -340,6 +346,78 @@
         }
 
         @media (max-width: 768px) {
+            .app-header {
+                padding: 0.5rem 0.75rem;
+            }
+            .header-content {
+                gap: 0.5rem;
+            }
+            .logo h1 {
+                font-size: 1.1rem;
+            }
+            .logo p {
+                font-size: 0.75rem;
+            }
+            .weather-pill {
+                font-size: 0.72rem;
+                padding: 0.25rem 0.55rem;
+            }
+            .controls {
+                gap: 0.45rem;
+            }
+            .control-group {
+                padding: 0.2rem;
+                gap: 0.3rem;
+            }
+            .btn {
+                padding: 0.36rem 0.62rem;
+                font-size: 0.76rem;
+            }
+            .theme-toggle {
+                padding: 0.22rem 0.45rem;
+                gap: 0.35rem;
+            }
+            .theme-toggle__track {
+                width: 38px;
+                height: 20px;
+            }
+            .theme-toggle__thumb {
+                width: 16px;
+                height: 16px;
+            }
+            .theme-toggle input:checked + .theme-toggle__track .theme-toggle__thumb {
+                transform: translateX(18px);
+            }
+            .week-section {
+                margin-top: 0.5rem;
+                padding: 0 0.75rem;
+            }
+            .week-indicator {
+                gap: 0.55rem;
+                padding: 0.5rem 0.8rem;
+                border-radius: 1rem;
+            }
+            .week-indicator span {
+                font-size: 0.85rem;
+            }
+            .week-btn {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.65rem;
+            }
+            .main-content {
+                margin: 1rem auto;
+                padding: 0 0.75rem;
+            }
+            .cards-container {
+                gap: 0.75rem;
+            }
+            .day-card {
+                border-radius: 1rem;
+            }
+            .day-card__header {
+                padding: 0.65rem 0.9rem;
+                font-size: 1rem;
+            }
             .lessons-table {
                 display: block;
                 overflow-x: auto;
@@ -361,8 +439,17 @@
                 margin-bottom: 1rem;
             }
             .lessons-table td, .lessons-table th {
-                padding: 0.5rem 0.75rem;
-                font-size: 0.8rem;
+                padding: 0.4rem 0.55rem;
+                font-size: 0.74rem;
+            }
+            .app-footer {
+                padding: 1rem 0.7rem;
+                font-size: 0.78rem;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
+            .footer-btn {
+                padding: 0.2rem 0.7rem;
             }
         }
 
@@ -855,6 +942,8 @@
                 this.state = this.store.init();
                 this.renderer = null;
                 this.isAdmin = false;
+                this.lastScrollY = 0;
+                this.scrollTicking = false;
                 this.baseUrls = {
                     '1': 'https://rasps.nsuem.ru/group/9-%D0%98%D0%A1403/1',
                     '2': 'https://rasps.nsuem.ru/group/9-%D0%98%D0%A1403/2'
@@ -876,8 +965,47 @@
                 await this.loadSchedule({ showSkeleton: true, animate: false });
                 this.initWeekIndicator();
                 this.initCookieBanner();
+                this.initMobileHeaderBehavior();
                 setInterval(() => this.loadSchedule({ showSkeleton: false, animate: false }), 60000);
                 setInterval(() => this.loadWeather(), 600000);
+            }
+
+            initMobileHeaderBehavior() {
+                const mobileQuery = window.matchMedia('(max-width: 768px)');
+                const onScroll = () => {
+                    if (!mobileQuery.matches) {
+                        document.body.classList.remove('header-hidden');
+                        this.lastScrollY = window.scrollY;
+                        return;
+                    }
+
+                    const currentY = window.scrollY;
+                    const delta = currentY - this.lastScrollY;
+
+                    if (currentY <= 10 || delta < -5) {
+                        document.body.classList.remove('header-hidden');
+                    } else if (delta > 5 && currentY > 80) {
+                        document.body.classList.add('header-hidden');
+                    }
+
+                    this.lastScrollY = currentY;
+                    this.scrollTicking = false;
+                };
+
+                this.lastScrollY = window.scrollY;
+
+                window.addEventListener('scroll', () => {
+                    if (this.scrollTicking) return;
+                    this.scrollTicking = true;
+                    requestAnimationFrame(onScroll);
+                }, { passive: true });
+
+                mobileQuery.addEventListener('change', () => {
+                    if (!mobileQuery.matches) {
+                        document.body.classList.remove('header-hidden');
+                    }
+                    this.lastScrollY = window.scrollY;
+                });
             }
 
             getWeatherDescription(code) {
