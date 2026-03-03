@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <title>Расписание | 9-ИС403</title>
+
+    <!-- Яндекс.Метрика -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=106820234', 'ym');
+
+        ym(106820234, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/106820234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+    <style>
+        /* ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --border-color: #e2e8f0;
+            --accent-primary: #2563eb;
+            --accent-soft: #dbeafe;
+            --header-bg: #ffffff;
+            --today-bg: #f0f9ff;
+            --now-border: #2563eb;
+            --week-indicator-bg: #e2e8f0;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        body[data-theme="dark"] {
+            --bg-primary: #0b1020;
+            --bg-secondary: #121a2b;
+            --text-primary: #e6edf7;
+            --text-secondary: #a9b7cc;
+            --border-color: #24314a;
+            --accent-primary: #7c9cff;
+            --accent-soft: #1a2740;
+            --header-bg: #10182a;
+            --today-bg: #172846;
+            --now-border: #9ab3ff;
+            --week-indicator-bg: #172338;
+            --card-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.65);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        /* ==================== ШАПКА ==================== */
+        .app-header {
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(8px);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo h1 { font-size: 1.5rem; color: var(--accent-primary); }
+        .logo p { font-size: 0.875rem; color: var(--text-secondary); }
+
+        .weather-pill {
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            background: var(--accent-soft);
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            padding: 0.35rem 0.75rem;
+            white-space: nowrap;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--bg-primary);
+            padding: 0.25rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-secondary);
+            transition: 0.15s;
+            white-space: nowrap;
+        }
+        .btn:hover { background: var(--accent-soft); color: var(--accent-primary); }
+        .btn.active { background: var(--accent-primary); color: white; }
+
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            padding: 0.35rem 0.6rem;
+            user-select: none;
+            cursor: pointer;
+        }
+        .theme-toggle__icon {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .theme-toggle input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .theme-toggle__track {
+            width: 44px;
+            height: 24px;
+            border-radius: 999px;
+            background: #d1d5db;
+            position: relative;
+            transition: background 0.2s ease;
+        }
+        .theme-toggle__thumb {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+            transition: transform 0.2s ease;
+        }
+        .theme-toggle input:checked + .theme-toggle__track {
+            background: var(--accent-primary);
+        }
+        .theme-toggle input:checked + .theme-toggle__track .theme-toggle__thumb {
+            transform: translateX(20px);
+        }
+
+
+        /* ==================== БЛОК НЕДЕЛЬ ==================== */
+        .week-section {
+            max-width: 1400px;
+            margin: 1rem auto 0;
+            padding: 0 1rem;
+        }
+        .week-indicator {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--week-indicator-bg);
+            padding: 0.75rem 1.5rem;
+            border-radius: 3rem;
+            flex-wrap: wrap;
+        }
+        .week-indicator span { font-weight: 600; }
+        .week-buttons { display: flex; gap: 0.5rem; }
+        .week-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.25rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        .week-btn.active {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        /* ==================== КАРТОЧКИ ДНЕЙ ==================== */
+        .main-content {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .cards-container.transitioning {
+            opacity: 0.65;
+            transform: translateY(6px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .cards-container.cards-animate-in {
+            animation: cardsFadeIn 0.3s ease;
+        }
+
+        @keyframes cardsFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .day-card {
+            background: var(--bg-secondary);
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .day-card.skeleton-card {
+            padding: 1rem 1.25rem;
+        }
+
+        .skeleton-line {
+            height: 14px;
+            border-radius: 0.5rem;
+            margin-bottom: 0.65rem;
+            background: linear-gradient(90deg, var(--bg-primary) 25%, var(--accent-soft) 50%, var(--bg-primary) 75%);
+            background-size: 220% 100%;
+            animation: shimmer 1.2s infinite linear;
+        }
+
+        .skeleton-line.header { height: 18px; width: 40%; margin-bottom: 1rem; }
+        .skeleton-line.wide { width: 90%; }
+        .skeleton-line.mid { width: 70%; }
+        .skeleton-line.short { width: 45%; margin-bottom: 0; }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .day-card__header {
+            padding: 1rem 1.5rem;
+            background: var(--accent-soft);
+            border-bottom: 2px solid var(--accent-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+        .day-card.today .day-card__header {
+            background: var(--today-bg);
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .lessons-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+            table-layout: fixed;
+        }
+        .lessons-table th, .lessons-table td {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+            word-wrap: break-word;
+        }
+        .lessons-table th {
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .lessons-table th:first-child, .lessons-table td:first-child {
+            width: 15%;
+            min-width: 60px;
+        }
+        .lessons-table th:nth-child(2), .lessons-table td:nth-child(2) {
+            width: 55%;
+            min-width: 120px;
+        }
+        .lessons-table th:last-child, .lessons-table td:last-child {
+            width: 30%;
+            min-width: 80px;
+        }
+        .lessons-table tr:last-child td { border-bottom: none; }
+
+        .current-lesson {
+            background: var(--accent-soft) !important;
+            border-left: 4px solid var(--now-border);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37,99,235,0.3); }
+            70% { box-shadow: 0 0 0 6px transparent; }
+        }
+
+        .lesson-note {
+            margin-top: 0.25rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: var(--accent-soft);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .error-message {
+            padding: 2rem;
+            text-align: center;
+            color: var(--error, #ef4444);
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 768px) {
+            .lessons-table {
+                display: block;
+                overflow-x: auto;
+                min-width: 100%;
+            }
+            .lessons-table th:first-child, .lessons-table td:first-child {
+                width: 20%;
+                min-width: 50px;
+            }
+            .lessons-table th:nth-child(2), .lessons-table td:nth-child(2) {
+                width: 50%;
+                min-width: 100px;
+            }
+            .lessons-table th:last-child, .lessons-table td:last-child {
+                width: 30%;
+                min-width: 70px;
+            }
+            .day-card {
+                margin-bottom: 1rem;
+            }
+            .lessons-table td, .lessons-table th {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* ==================== МОДАЛЬНОЕ ОКНО ВХОДА ==================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid var(--border-color);
+        }
+        .modal-content h2 { margin-bottom: 1rem; color: var(--accent-primary); }
+        .modal-content input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        .modal-content button {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+        .modal-content .error { color: #ef4444; margin-top: 0.5rem; }
+
+        /* ==================== АДМИН-ПАНЕЛЬ ==================== */
+        .admin-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        .admin-panel h3 { color: var(--accent-primary); mb: 1rem; }
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px,1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-primary);
+        }
+        .admin-notes { margin-top: 1.5rem; }
+        .note-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .note-item button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+        }
+        .admin-btn {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            margin-right: 0.5rem;
+        }
+
+        /* ==================== COOKIE-БАННЕР ==================== */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 1rem;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .cookie-banner.show { display: flex; }
+        .cookie-content {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cookie-content p { color: var(--text-primary); }
+        .cookie-btn {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            cursor: pointer;
+        }
+
+        /* ==================== ФУТЕР ==================== */
+        .app-footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .footer-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 0.25rem 1rem;
+            border-radius: 2rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        .footer-btn:hover { background: var(--accent-soft); }
+
+        .notification {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-primary);
+            border-radius: 0.5rem;
+            box-shadow: var(--card-shadow);
+            z-index: 1001;
+            animation: slideIn 0.3s;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+    </style>
+</head>
+<body data-theme="blue">
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo">
+                <h1>📅 Расписание</h1>
+                <p>Группа 9-ИС403 · 2 курс</p>
+            </div>
+            <div class="weather-pill" id="weatherNow">Новосибирск: 26°C, дождь</div>
+            <div class="controls">
+                <div class="control-group" id="subgroupSelector">
+                    <button class="btn active" data-subgroup="1">Подгруппа 1</button>
+                    <button class="btn" data-subgroup="2">Подгруппа 2</button>
+                </div>
+                <label class="theme-toggle" id="themeSelector" title="Переключить тёмную тему">
+                    <span class="theme-toggle__icon">☀️</span>
+                    <input type="checkbox" id="themeToggle" aria-label="Переключатель темы">
+                    <span class="theme-toggle__track"><span class="theme-toggle__thumb"></span></span>
+                    <span class="theme-toggle__icon">🌙</span>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <div class="week-section">
+        <div class="week-indicator">
+            <span id="currentWeekLabel">Определение недели...</span>
+            <div class="week-buttons">
+                <button class="week-btn" data-week="1">1 неделя</button>
+                <button class="week-btn" data-week="2">2 неделя</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div id="cardsContainer" class="cards-container">
+            <div class="day-card skeleton-card">
+                <div class="skeleton-line header"></div>
+                <div class="skeleton-line wide"></div>
+                <div class="skeleton-line mid"></div>
+                <div class="skeleton-line short"></div>
+            </div>
+        </div>
+        <div id="adminPanel" style="display: none;"></div>
+    </main>
+
+    <footer class="app-footer">
+        <p>Данные с rasps.nsuem.ru · Обновлено сейчас · beta v 0.2</p>
+        <button class="footer-btn" id="adminLoginBtn">🔐</button>
+    </footer>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h2>Админка</h2>
+            <input type="text" id="loginUsername" placeholder="Логин">
+            <input type="password" id="loginPassword" placeholder="Пароль">
+            <button id="loginSubmit">Войти</button>
+            <div class="error" id="loginError"></div>
+        </div>
+    </div>
+
+    <div class="cookie-banner" id="cookieBanner">
+        <div class="cookie-content">
+            <p>Тут нужно нажать "принять"</p>
+            <button class="cookie-btn" id="acceptCookies">Принять</button>
+        </div>
+    </div>
+
+    <div id="notificationContainer"></div>
+
+    <script type="module">
+        // ==================== ХРАНИЛИЩЕ ====================
+        const AppStore = {
+            state: {
+                subgroup: '1',
+                theme: 'system',
+                selectedWeek: 'auto',
+                notes: {},
+                visitCount: 0,
+                lastLogin: null,
+                cookieAccepted: false
+            },
+
+            getSystemTheme() {
+                return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'blue';
+            },
+
+            init() {
+                const saved = localStorage.getItem('scheduleApp');
+                if (saved) {
+                    try {
+                        this.state = { ...this.state, ...JSON.parse(saved) };
+                    } catch (e) {}
+                }
+
+                // Всегда применять системную тему при открытии
+                this.state.theme = this.getSystemTheme();
+                document.body.dataset.theme = this.state.theme;
+                this.state.visitCount++;
+                this.save();
+                return this.state;
+            },
+
+            save() {
+                localStorage.setItem('scheduleApp', JSON.stringify(this.state));
+            },
+
+            update(key, value) {
+                if (key in this.state) {
+                    this.state[key] = value;
+                    if (key === 'theme') document.body.dataset.theme = value;
+                    this.save();
+                }
+            }
+        };
+
+        // ==================== ПАРСЕР ====================
+        class ScheduleParser {
+            static parseSemester(html) {
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                const tables = doc.querySelectorAll('table');
+                if (tables.length < 2) return [];
+                const rows = tables[1].querySelectorAll('tr');
+                const schedule = [];
+                let currentDay = '';
+
+                for (let i = 1; i < rows.length; i++) {
+                    const cells = rows[i].querySelectorAll('td');
+                    if (cells.length < 4) continue;
+
+                    const dayCell = cells[0]?.textContent.trim();
+                    if (dayCell && /[а-я]{2}/i.test(dayCell)) currentDay = dayCell;
+
+                    // Fix for double time issue - extract only the first time if there are duplicates
+                    let time = cells[1]?.textContent.trim();
+                    if (time && /^(\d{2}:\d{2})\1/.test(time)) {
+                        time = time.match(/^(\d{2}:\d{2})\1/)[1];
+                    } else if (time && time.length > 5 && !time.includes('-') && !time.includes('–') && !time.includes('—')) {
+                        // If time is longer than 5 chars and doesn't contain dashes, extract first 5 chars (HH:MM)
+                        time = time.substring(0, 5);
+                    }
+                    const week1 = this.parseLessonCell(cells[2]);
+                    const week2 = this.parseLessonCell(cells[3]);
+
+                    week1.forEach(l => schedule.push({ day: currentDay, time, week: 1, name: l.name, type: l.type, location: l.location, teacher: l.teacher }));
+                    week2.forEach(l => schedule.push({ day: currentDay, time, week: 2, name: l.name, type: l.type, location: l.location, teacher: l.teacher }));
+                }
+                return schedule;
+            }
+
+            static parseLessonCell(cell) {
+                if (!cell) return [];
+                const clone = cell.cloneNode(true);
+                clone.innerHTML = clone.innerHTML.replace(/<br\s*\/?>/g, '|');
+                return clone.textContent.split('|').map(s => s.trim()).filter(s => s).map(text => {
+                    // Extract lesson type first
+                    const typeMatch = text.match(/(Лекция|Семинар|Экзамен|Консультация|Практика)/i);
+                    let type = typeMatch ? typeMatch[0] : '';
+
+                    // Remove type from text for cleaner parsing
+                    let cleanText = text.replace(type, '').replace(/,\s*,/g, ',').replace(/,\s*$/, '').trim();
+
+                    // Split by commas to get parts
+                    const parts = cleanText.split(',').map(s => s.trim()).filter(s => s);
+
+                    // Determine name, location, and teacher
+                    let name = parts[0] || cleanText;
+                    let location = '';
+                    let teacher = '';
+
+                    // If there are multiple parts, try to determine location and teacher
+                    if (parts.length > 1) {
+                        // Location is typically a room number (contains digits and possibly hyphens)
+                        // Teacher is typically a name (contains letters and spaces)
+                        const possibleLocation = parts[1];
+                        const possibleTeacher = parts[2] || '';
+
+                        // Simple heuristic: if it looks like a room number, it's location
+                        if (possibleLocation && /\d+[-\d]*\d*|[а-я]+\d+|[а-я]+\-\d+/.test(possibleLocation)) {
+                            location = possibleLocation;
+                            teacher = possibleTeacher;
+                        } else {
+                            // If first part doesn't look like location, maybe second part is
+                            location = possibleTeacher;
+                        }
+                    }
+
+                    return { name, type, location, teacher };
+                });
+            }
+        }
+
+        // ==================== РЕНДЕРЕР ====================
+        class ScheduleRenderer {
+            constructor(container, store) {
+                this.container = container;
+                this.store = store;
+            }
+
+            parseTimeToMinutes(timeValue) {
+                const cleanTime = (timeValue || '').split(/[-–—]/)[0].trim();
+                const match = cleanTime.match(/^(\d{1,2}):(\d{2})/);
+                if (!match) return null;
+                return parseInt(match[1], 10) * 60 + parseInt(match[2], 10);
+            }
+
+            formatMinutesToTime(totalMinutes) {
+                const hours = Math.floor(totalMinutes / 60);
+                const minutes = totalMinutes % 60;
+                return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+            }
+
+            getLessonTimeRange(startTime) {
+                const startMinutes = this.parseTimeToMinutes(startTime);
+                if (startMinutes === null) return '00:00–01:30';
+                const endMinutes = startMinutes + 90;
+                return `${this.formatMinutesToTime(startMinutes)}–${this.formatMinutesToTime(endMinutes)}`;
+            }
+
+            normalizeLocation(location) {
+                if (!location) return '—';
+
+                const cleanLocation = location.replace(/\s+/g, ' ').trim();
+                const gymMatch = cleanLocation.match(/спортзал\s*([23])/i);
+                if (gymMatch) {
+                    return `спортзал ${gymMatch[1]}`;
+                }
+
+                const roomMatch = cleanLocation.match(/\b\d-\d{2,4}\b/);
+                if (roomMatch) {
+                    return roomMatch[0];
+                }
+
+                return '—';
+            }
+
+            isCurrentLesson(day, startTime) {
+                const now = new Date();
+                const curDay = now.toLocaleDateString('ru-RU', { weekday: 'short' }).toLowerCase().slice(0, 2);
+                if (!day.toLowerCase().startsWith(curDay)) return false;
+
+                const currentMinutes = now.getHours() * 60 + now.getMinutes();
+                const startMinutes = this.parseTimeToMinutes(startTime);
+                if (startMinutes === null) return false;
+                const endMinutes = startMinutes + 90;
+
+                return currentMinutes >= startMinutes && currentMinutes < endMinutes;
+            }
+
+            renderSemester(data) {
+                if (!data.length) {
+                    this.container.innerHTML = '<div class="error-message">Нет данных для отображения</div>';
+                    return;
+                }
+
+                const daysMap = new Map();
+                data.forEach(lesson => {
+                    if (!daysMap.has(lesson.day)) {
+                        daysMap.set(lesson.day, []);
+                    }
+                    daysMap.get(lesson.day).push(lesson);
+                });
+
+                const today = new Date().toLocaleDateString('ru-RU', { weekday: 'short' }).toLowerCase().slice(0, 2);
+                let html = '';
+
+                for (const [day, lessons] of daysMap.entries()) {
+                    // Sort by time properly - convert to minutes since midnight
+                    lessons.sort((a, b) => {
+                        const timeA = (a.time.split(/[-–—]/)[0] || a.time).trim();
+                        const timeB = (b.time.split(/[-–—]/)[0] || b.time).trim();
+
+                        // Extract hours and minutes
+                        const matchA = timeA.match(/^(\d{1,2}):(\d{2})/);
+                        const matchB = timeB.match(/^(\d{1,2}):(\d{2})/);
+
+                        // Convert to minutes for accurate comparison
+                        const minutesA = matchA ? parseInt(matchA[1]) * 60 + parseInt(matchA[2]) : 0;
+                        const minutesB = matchB ? parseInt(matchB[1]) * 60 + parseInt(matchB[2]) : 0;
+
+                        return minutesA - minutesB;
+                    });
+                    const isToday = day.toLowerCase().startsWith(today);
+                    html += `<div class="day-card ${isToday ? 'today' : ''}">`;
+                    html += `<div class="day-card__header">${day}</div>`;
+                    html += '<table class="lessons-table">';
+                    html += '<thead><tr><th>Время</th><th>Дисциплина</th><th>Аудитория</th></tr></thead>';
+                    html += '<tbody>';
+
+                    lessons.forEach(lesson => {
+                        const key = `${day}_${lesson.time}_${lesson.week}`;
+                        const note = this.store.state.notes[key];
+                        const isCurrent = this.isCurrentLesson(day, lesson.time) ? 'current-lesson' : '';
+
+                        html += `<tr class="${isCurrent}" data-lesson-key="${key}">`;
+                        const timeRange = this.getLessonTimeRange(lesson.time);
+                        const normalizedLocation = this.normalizeLocation(lesson.location);
+                        html += `<td>${timeRange}</td>`;
+                        html += `<td>${lesson.name} ${lesson.type ? `(${lesson.type})` : ''}</td>`;
+                        html += `<td>${normalizedLocation}</td>`;
+                        html += '</tr>';
+                        if (note) {
+                            html += `<tr class="lesson-note-row"><td colspan="3"><div class="lesson-note">📝 ${note}</div></td></tr>`;
+                        }
+                    });
+
+                    html += '</tbody></table>';
+                    html += '</div>';
+                }
+
+                this.container.innerHTML = html;
+            }
+
+            showError(message) {
+                this.container.innerHTML = `<div class="error-message">${message}</div>`;
+            }
+        }
+
+        // ==================== ГЛАВНОЕ ПРИЛОЖЕНИЕ ====================
+        class App {
+            constructor() {
+                this.store = AppStore;
+                this.state = this.store.init();
+                this.renderer = null;
+                this.isAdmin = false;
+                this.baseUrls = {
+                    '1': 'https://rasps.nsuem.ru/group/9-%D0%98%D0%A1403/1',
+                    '2': 'https://rasps.nsuem.ru/group/9-%D0%98%D0%A1403/2'
+                };
+            }
+
+            async init() {
+                this.renderer = new ScheduleRenderer(document.getElementById('cardsContainer'), this.store);
+                this.setupEventListeners();
+
+                // При открытии неделя всегда определяется автоматически по текущей дате
+                this.store.update('selectedWeek', 'auto');
+
+                // Синхронизация переключателя с применённой темой
+                const themeToggle = document.getElementById('themeToggle');
+                if (themeToggle) themeToggle.checked = this.state.theme === 'dark';
+
+                await this.loadWeather();
+                await this.loadSchedule({ showSkeleton: true, animate: false });
+                this.initWeekIndicator();
+                this.initCookieBanner();
+                setInterval(() => this.loadSchedule({ showSkeleton: false, animate: false }), 60000);
+                setInterval(() => this.loadWeather(), 600000);
+            }
+
+            getWeatherDescription(code) {
+                const map = {
+                    0: 'ясно',
+                    1: 'преимущественно ясно',
+                    2: 'переменная облачность',
+                    3: 'пасмурно',
+                    45: 'туман',
+                    48: 'изморозь',
+                    51: 'морось',
+                    53: 'морось',
+                    55: 'сильная морось',
+                    56: 'ледяная морось',
+                    57: 'ледяная морось',
+                    61: 'дождь',
+                    63: 'дождь',
+                    65: 'сильный дождь',
+                    66: 'ледяной дождь',
+                    67: 'ледяной дождь',
+                    71: 'снег',
+                    73: 'снег',
+                    75: 'сильный снег',
+                    77: 'снежные зёрна',
+                    80: 'ливень',
+                    81: 'ливень',
+                    82: 'сильный ливень',
+                    85: 'снегопад',
+                    86: 'сильный снегопад',
+                    95: 'гроза',
+                    96: 'гроза с градом',
+                    99: 'сильная гроза с градом'
+                };
+                return map[code] || 'без данных';
+            }
+
+            async loadWeather() {
+                const weatherEl = document.getElementById('weatherNow');
+                if (!weatherEl) return;
+
+                try {
+                    const url = 'https://api.open-meteo.com/v1/forecast?latitude=55.03&longitude=82.92&current=temperature_2m,weather_code&timezone=Asia%2FNovosibirsk';
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error('Ошибка загрузки погоды');
+                    const data = await res.json();
+
+                    const temp = Math.round(data?.current?.temperature_2m);
+                    const code = data?.current?.weather_code;
+                    const desc = this.getWeatherDescription(code);
+
+                    weatherEl.textContent = `Новосибирск: ${temp}°C, ${desc}`;
+                } catch (e) {
+                    weatherEl.textContent = 'Новосибирск: погода недоступна';
+                }
+            }
+
+            showLoadingSkeleton() {
+                const container = document.getElementById('cardsContainer');
+                container.innerHTML = Array.from({ length: 3 }).map(() => `
+                    <div class="day-card skeleton-card">
+                        <div class="skeleton-line header"></div>
+                        <div class="skeleton-line wide"></div>
+                        <div class="skeleton-line mid"></div>
+                        <div class="skeleton-line short"></div>
+                    </div>
+                `).join('');
+            }
+
+            animateCards() {
+                const container = document.getElementById('cardsContainer');
+                container.classList.remove('cards-animate-in');
+                void container.offsetWidth;
+                container.classList.add('cards-animate-in');
+                setTimeout(() => container.classList.remove('cards-animate-in'), 320);
+            }
+
+            setupEventListeners() {
+                document.querySelectorAll('[data-subgroup]').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                    const sub = e.target.dataset.subgroup;
+                    this.store.update('subgroup', sub);
+                    document.querySelectorAll('[data-subgroup]').forEach(b => b.classList.toggle('active', b.dataset.subgroup === sub));
+                    await this.loadSchedule({ showSkeleton: true, animate: true });
+                    this.showNotification(`Подгруппа ${sub}`);
+                });
+                });
+
+                document.getElementById('themeToggle')?.addEventListener('change', (e) => {
+                    const theme = e.target.checked ? 'dark' : 'blue';
+                    this.store.update('theme', theme);
+                });
+
+                document.querySelectorAll('.week-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                    const week = e.target.dataset.week;
+                    this.store.update('selectedWeek', week);
+                    document.querySelectorAll('.week-btn').forEach(b => b.classList.toggle('active', b.dataset.week === week));
+                    await this.loadSchedule({ showSkeleton: true, animate: true });
+                });
+                });
+
+                document.getElementById('adminLoginBtn').addEventListener('click', () => {
+                    document.getElementById('loginModal').classList.add('active');
+                });
+
+                document.getElementById('loginSubmit').addEventListener('click', () => {
+                    const user = document.getElementById('loginUsername').value;
+                    const pass = document.getElementById('loginPassword').value;
+                    if (user === 'ydkova' && pass === 'okeyshawty') {
+                        this.isAdmin = true;
+                        this.store.update('lastLogin', new Date().toISOString());
+                        document.getElementById('loginModal').classList.remove('active');
+                        this.showAdminPanel();
+                        this.showNotification('Добро пожаловать, админ!', 'success');
+                    } else {
+                        document.getElementById('loginError').textContent = 'Неверный логин или пароль';
+                    }
+                });
+
+                document.getElementById('loginModal').addEventListener('click', (e) => {
+                    if (e.target === document.getElementById('loginModal')) e.target.classList.remove('active');
+                });
+            }
+
+            initWeekIndicator() {
+                const start = new Date(2024, 8, 1);
+                const today = new Date();
+                const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+                const weekNumber = Math.floor(diffDays / 7) + 1;
+                const realWeek = (weekNumber % 2 === 1) ? '1' : '2';
+
+                document.getElementById('currentWeekLabel').innerText = `Сейчас ${realWeek}-я неделя`;
+
+                let selected = this.state.selectedWeek;
+                if (selected === 'auto') selected = realWeek;
+                this.store.update('selectedWeek', selected);
+                document.querySelectorAll('.week-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.week === selected);
+                });
+            }
+
+            initCookieBanner() {
+                if (!this.state.cookieAccepted) {
+                    document.getElementById('cookieBanner').classList.add('show');
+                }
+                document.getElementById('acceptCookies').addEventListener('click', () => {
+                    this.store.update('cookieAccepted', true);
+                    document.getElementById('cookieBanner').classList.remove('show');
+                });
+            }
+
+            async loadSchedule({ showSkeleton = false, animate = false } = {}) {
+                const container = document.getElementById('cardsContainer');
+                try {
+                    if (showSkeleton) {
+                        container.classList.add('transitioning');
+                        this.showLoadingSkeleton();
+                    }
+
+                    const url = this.baseUrls[this.state.subgroup];
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error(`Ошибка загрузки: ${res.status} ${res.statusText}`);
+                    const html = await res.text();
+                    let data = ScheduleParser.parseSemester(html);
+                    const week = this.state.selectedWeek === 'auto' ? this.getRealWeek() : this.state.selectedWeek;
+                    data = data.filter(lesson => lesson.week === parseInt(week));
+                    this.renderer.renderSemester(data);
+                    if (animate) this.animateCards();
+                } catch (e) {
+                    console.error(e);
+                    this.renderer.showError('Ошибка подключения к расписанию. Попробуйте позже.');
+                } finally {
+                    container.classList.remove('transitioning');
+                }
+            }
+
+            getRealWeek() {
+                const start = new Date(2024, 8, 1);
+                const diffDays = Math.floor((new Date() - start) / (1000 * 60 * 60 * 24));
+                return (Math.floor(diffDays / 7) + 1) % 2 === 1 ? '1' : '2';
+            }
+
+            showAdminPanel() {
+                const container = document.getElementById('adminPanel');
+                container.style.display = 'block';
+                container.innerHTML = this.renderAdminPanel();
+                this.attachAdminHandlers();
+            }
+
+            renderAdminPanel() {
+                const notes = Object.entries(this.store.state.notes).map(([k, v]) =>
+                    `<div class="note-item"><span>${k}: ${v}</span><button data-note-key="${k}">Удалить</button></div>`
+                ).join('');
+                return `
+                    <div class="admin-panel">
+                        <h3>🔧 Панель администратора</h3>
+                        <div class="admin-stats">
+                            <div class="stat-card"><div class="value">${this.store.state.visitCount}</div><div>Посещений</div></div>
+                            <div class="stat-card"><div class="value">${Object.keys(this.store.state.notes).length}</div><div>Заметок</div></div>
+                            <div class="stat-card"><div class="value">${this.store.state.lastLogin ? new Date(this.store.state.lastLogin).toLocaleDateString() : '—'}</div><div>Последний вход</div></div>
+                        </div>
+                        <div class="admin-notes"><h4>Заметки к занятиям:</h4>${notes || '<p>Пока нет заметок.</p>'}</div>
+                        <button class="admin-btn" id="clearAllNotes">Очистить все заметки</button>
+                        <button class="admin-btn" id="exportNotes">Экспорт заметок</button>
+                        <p style="margin-top:1rem; font-size:0.8rem;">💡 Кликните на строку занятия, чтобы добавить/редактировать заметку (только для админа).</p>
+                    </div>
+                `;
+            }
+
+            attachAdminHandlers() {
+                document.getElementById('clearAllNotes')?.addEventListener('click', () => {
+                    this.store.state.notes = {};
+                    this.store.save();
+                    this.showAdminPanel();
+                    this.loadSchedule();
+                });
+                document.getElementById('exportNotes')?.addEventListener('click', () => {
+                    const blob = new Blob([JSON.stringify(this.store.state.notes, null, 2)], { type: 'application/json' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = 'notes.json';
+                    a.click();
+                });
+                document.querySelectorAll('[data-note-key]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const key = e.target.dataset.noteKey;
+                        delete this.store.state.notes[key];
+                        this.store.save();
+                        this.showAdminPanel();
+                        this.loadSchedule();
+                    });
+                });
+            }
+
+            showNotification(msg, type = 'info') {
+                const n = document.createElement('div');
+                n.className = `notification ${type}`;
+                n.textContent = msg;
+                document.getElementById('notificationContainer').appendChild(n);
+                setTimeout(() => n.remove(), 3000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = new App();
+            app.init();
+
+            document.addEventListener('click', (e) => {
+                if (!app.isAdmin) return;
+                const row = e.target.closest('tr[data-lesson-key]');
+                if (!row) return;
+                const key = row.dataset.lessonKey;
+                const note = prompt('Введите заметку к этому занятию:', app.store.state.notes[key] || '');
+                if (note !== null) {
+                    if (note.trim() === '') delete app.store.state.notes[key];
+                    else app.store.state.notes[key] = note;
+                    app.store.save();
+                    app.loadSchedule();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
