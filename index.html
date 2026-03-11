@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
-    <title>Расписание | 9-ИС403</title>
-
-    <!-- Яндекс.Метрика -->
-    <script type="text/javascript">
+<!-- Yandex.Metrika counter (disabled on file://) -->
+<script type="text/javascript">
+    if (location.protocol !== 'file:') {
         (function(m,e,t,r,i,k,a){
             m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
             m[i].l=1*new Date();
             for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
             k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=106820234', 'ym');
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107250153', 'ym');
 
-        ym(106820234, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
-    </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/106820234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+        ym(107250153, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+    }
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107250153" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 
     <style>
         /* ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==================== */
@@ -84,30 +83,30 @@
             max-width: 1400px;
             margin: 0 auto;
             display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
+            flex-direction: column;
+            gap: 0.8rem;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .header-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.65rem;
         }
 
         .logo h1 { font-size: 1.5rem; color: var(--accent-primary); }
         .logo p { font-size: 0.875rem; color: var(--text-secondary); }
-
-        .weather-pill {
-            font-size: 0.82rem;
-            color: var(--text-primary);
-            background: var(--accent-soft);
-            border: 1px solid var(--border-color);
-            border-radius: 999px;
-            padding: 0.35rem 0.75rem;
-            white-space: nowrap;
-        }
 
         .controls {
             display: flex;
             flex-wrap: wrap;
             gap: 0.75rem;
             align-items: center;
+            justify-content: center;
         }
 
         .control-group {
@@ -124,6 +123,7 @@
             border: none;
             border-radius: 2rem;
             font-size: 0.875rem;
+            min-width: 120px;
             cursor: pointer;
             background: transparent;
             color: var(--text-secondary);
@@ -132,6 +132,51 @@
         }
         .btn:hover { background: var(--accent-soft); color: var(--accent-primary); }
         .btn.active { background: var(--accent-primary); color: white; }
+
+        .glossy-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.45rem 1.0rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(219,234,254,0.7));
+            border: 1.5px solid transparent;
+            background-origin: border-box;
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.18), inset 0 0 0 1px rgba(255,255,255,0.6);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        .glossy-btn::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 1.5px;
+            border-radius: 2rem;
+            background: linear-gradient(120deg, #7c9cff, #2563eb, #7c9cff);
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        .glossy-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(37, 99, 235, 0.25), inset 0 0 0 1px rgba(255,255,255,0.6);
+        }
+        .glossy-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 14px rgba(37, 99, 235, 0.2);
+        }
+        body[data-theme="dark"] .glossy-btn {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #fff;
+            box-shadow: 0 10px 26px rgba(37, 99, 235, 0.35), inset 0 0 0 1px rgba(255,255,255,0.08);
+        }
+        body[data-theme="dark"] .glossy-btn::before {
+            background: linear-gradient(120deg, #93b4ff, #2563eb, #93b4ff);
+        }
 
         .theme-toggle {
             display: inline-flex;
@@ -194,13 +239,15 @@
             padding: 0.75rem 1.5rem;
             border-radius: 3rem;
             flex-wrap: wrap;
+            justify-content: center;
         }
         .week-indicator span { font-weight: 600; }
-        .week-buttons { display: flex; gap: 0.5rem; }
+        .week-buttons { display: flex; gap: 0.5rem; justify-content: center; }
         .week-btn {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             padding: 0.25rem 1rem;
+            min-width: 120px;
             border-radius: 2rem;
             cursor: pointer;
             color: var(--text-secondary);
@@ -352,15 +399,16 @@
             .header-content {
                 gap: 0.5rem;
             }
+            .header-actions {
+                gap: 0.45rem;
+                width: 100%;
+                justify-content: center;
+            }
             .logo h1 {
                 font-size: 1.1rem;
             }
             .logo p {
                 font-size: 0.75rem;
-            }
-            .weather-pill {
-                font-size: 0.72rem;
-                padding: 0.25rem 0.55rem;
             }
             .controls {
                 gap: 0.45rem;
@@ -493,6 +541,7 @@
         }
         .modal-content .error { color: #ef4444; margin-top: 0.5rem; }
 
+
         /* ==================== АДМИН-ПАНЕЛЬ ==================== */
         .admin-panel {
             background: var(--bg-secondary);
@@ -501,7 +550,7 @@
             padding: 1.5rem;
             margin-top: 2rem;
         }
-        .admin-panel h3 { color: var(--accent-primary); mb: 1rem; }
+        .admin-panel h3 { color: var(--accent-primary); margin-bottom: 1rem; }
         .admin-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px,1fr));
@@ -593,6 +642,7 @@
             background: none;
             border: 1px solid var(--border-color);
             padding: 0.25rem 1rem;
+            min-width: 120px;
             border-radius: 2rem;
             color: var(--text-secondary);
             cursor: pointer;
@@ -625,18 +675,20 @@
                 <h1>📅 Расписание</h1>
                 <p>Группа 9-ИС403 · 2 курс</p>
             </div>
-            <div class="weather-pill" id="weatherNow">Новосибирск: 26°C, дождь</div>
-            <div class="controls">
-                <div class="control-group" id="subgroupSelector">
-                    <button class="btn active" data-subgroup="1">Подгруппа 1</button>
-                    <button class="btn" data-subgroup="2">Подгруппа 2</button>
+            <div class="header-actions">
+                <div class="controls">
+                    <div class="control-group" id="subgroupSelector">
+                        <button class="btn active" data-subgroup="1">Подгруппа 1</button>
+                        <button class="btn" data-subgroup="2">Подгруппа 2</button>
+                    </div>
+                    <a href="today.html" class="glossy-btn" id="todayPageBtn">Сегодня</a>
+                    <label class="theme-toggle" id="themeSelector" title="Переключить тёмную тему">
+                        <span class="theme-toggle__icon">☀️</span>
+                        <input type="checkbox" id="themeToggle" aria-label="Переключатель темы">
+                        <span class="theme-toggle__track"><span class="theme-toggle__thumb"></span></span>
+                        <span class="theme-toggle__icon">🌙</span>
+                    </label>
                 </div>
-                <label class="theme-toggle" id="themeSelector" title="Переключить тёмную тему">
-                    <span class="theme-toggle__icon">☀️</span>
-                    <input type="checkbox" id="themeToggle" aria-label="Переключатель темы">
-                    <span class="theme-toggle__track"><span class="theme-toggle__thumb"></span></span>
-                    <span class="theme-toggle__icon">🌙</span>
-                </label>
             </div>
         </div>
     </header>
@@ -664,7 +716,7 @@
     </main>
 
     <footer class="app-footer">
-        <p>Данные с rasps.nsuem.ru · Обновлено сейчас · beta v 0.2</p>
+        <p>Данные с rasps.nsuem.ru · Обновлено сейчас · beta v 0.5</p>
         <button class="footer-btn" id="adminLoginBtn">🔐</button>
     </footer>
 
@@ -942,8 +994,15 @@
                 this.state = this.store.init();
                 this.renderer = null;
                 this.isAdmin = false;
+                this.newsItems = [];
+                this.newsRenderKey = '';
                 this.lastScrollY = 0;
                 this.scrollTicking = false;
+                this.overlayAnimationMs = 240;
+                this.overlayCloseTimer = null;
+                this.newsCloseTimer = null;
+                this.semesterStartDate = new Date(2024, 8, 1);
+                this.dom = {};
                 this.baseUrls = {
                     '1': 'https://rasps.nsuem.ru/group/9-%D0%98%D0%A1403/1',
                     '2': 'https://rasps.nsuem.ru/group/9-%D0%98%D0%A1403/2'
@@ -952,6 +1011,7 @@
 
             async init() {
                 this.renderer = new ScheduleRenderer(document.getElementById('cardsContainer'), this.store);
+                this.initDomRefs();
                 this.setupEventListeners();
 
                 // При открытии неделя всегда определяется автоматически по текущей дате
@@ -961,13 +1021,33 @@
                 const themeToggle = document.getElementById('themeToggle');
                 if (themeToggle) themeToggle.checked = this.state.theme === 'dark';
 
-                await this.loadWeather();
+                await this.loadTodayOverview();
                 await this.loadSchedule({ showSkeleton: true, animate: false });
                 this.initWeekIndicator();
                 this.initCookieBanner();
                 this.initMobileHeaderBehavior();
                 setInterval(() => this.loadSchedule({ showSkeleton: false, animate: false }), 60000);
-                setInterval(() => this.loadWeather(), 600000);
+                setInterval(() => this.loadTodayOverview(), 600000);
+            }
+
+            initDomRefs() {
+                this.dom = {
+                    todayOverlay: document.getElementById('todayOverlay'),
+                    todayOpenBtn: document.getElementById('todayOpenBtn'),
+                    todayOverlayClose: document.getElementById('todayOverlayClose'),
+                    todayNewsList: document.getElementById('todayNewsList'),
+                    newsReaderOverlay: document.getElementById('newsReaderOverlay'),
+                    newsReaderFrame: document.getElementById('newsReaderFrame'),
+                    newsReaderTitle: document.getElementById('newsReaderTitle'),
+                    newsReaderExternal: document.getElementById('newsReaderExternal'),
+                    newsReaderClose: document.getElementById('newsReaderClose'),
+                    todayWeather: document.getElementById('todayWeather'),
+                    todayTraffic: document.getElementById('todayTraffic'),
+                    todayRate: document.getElementById('todayRate'),
+                    todayFact: document.getElementById('todayFact'),
+                    todayLucky: document.getElementById('todayLucky'),
+                    todayMood: document.getElementById('todayMood')
+                };
             }
 
             initMobileHeaderBehavior() {
@@ -1043,9 +1123,7 @@
             }
 
             async loadWeather() {
-                const weatherEl = document.getElementById('weatherNow');
-                if (!weatherEl) return;
-
+                const weatherEl = this.dom.todayWeather;
                 try {
                     const url = 'https://api.open-meteo.com/v1/forecast?latitude=55.03&longitude=82.92&current=temperature_2m,weather_code&timezone=Asia%2FNovosibirsk';
                     const res = await fetch(url);
@@ -1056,10 +1134,199 @@
                     const code = data?.current?.weather_code;
                     const desc = this.getWeatherDescription(code);
 
-                    weatherEl.textContent = `Новосибирск: ${temp}°C, ${desc}`;
+                    if (weatherEl) weatherEl.textContent = `${temp}°C, ${desc}`;
+                    const todayBtn = this.dom.todayOpenBtn;
+                    if (todayBtn) todayBtn.title = `Погода: ${temp}°C, ${desc}`;
                 } catch (e) {
-                    weatherEl.textContent = 'Новосибирск: погода недоступна';
+                    if (weatherEl) weatherEl.textContent = 'Погода недоступна';
                 }
+            }
+
+            updateTraffic() {
+                const trafficEl = this.dom.todayTraffic;
+                if (!trafficEl) return;
+
+                const now = new Date();
+                const hour = now.getHours();
+                const weekday = now.getDay();
+                const rushHour = (hour >= 8 && hour <= 10) || (hour >= 17 && hour <= 19);
+                const weekend = weekday === 0 || weekday === 6;
+
+                let score = weekend ? 3 : 4;
+                if (rushHour) score += 3;
+                score += Math.floor(Math.random() * 2);
+                score = Math.min(10, score);
+
+                const tip = score >= 7 ? 'лучше метро 🚇' : 'ехать можно 🚗';
+                trafficEl.textContent = `${score}/10 · ${tip}`;
+            }
+
+            async loadCurrencyRate() {
+                const rateEl = this.dom.todayRate;
+                if (!rateEl) return;
+
+                try {
+                    const res = await fetch('https://www.cbr-xml-daily.ru/daily_json.js');
+                    if (!res.ok) throw new Error('rate error');
+                    const data = await res.json();
+                    const usd = data?.Valute?.USD?.Value;
+                    const eur = data?.Valute?.EUR?.Value;
+                    if (typeof usd !== 'number' || typeof eur !== 'number') throw new Error('bad data');
+                    rateEl.textContent = `USD ${usd.toFixed(2)} ₽ · EUR ${eur.toFixed(2)} ₽`;
+                } catch (e) {
+                    rateEl.textContent = 'USD ~93 ₽ · EUR ~101 ₽';
+                }
+            }
+
+            setDailyFun() {
+                const facts = [
+                    'Сегодня идеальный день закрыть хвосты ✍️',
+                    'Если сделать 25 минут фокуса — уже победа 🏆',
+                    'Маленький шаг сегодня = большой результат завтра 🚀',
+                    'Мозг любит воду. Напоминание: попей 💧'
+                ];
+                const moods = ['Боевой 🔥', 'Спокойный 😌', 'Продуктивный ⚡', 'Лёгкий вайб 😎'];
+
+                const daySeed = new Date().getDate();
+                const factEl = this.dom.todayFact;
+                const luckyEl = this.dom.todayLucky;
+                const moodEl = this.dom.todayMood;
+
+                if (factEl) factEl.textContent = facts[daySeed % facts.length];
+                if (luckyEl) luckyEl.textContent = `${(daySeed * 7) % 97 || 17}`;
+                if (moodEl) moodEl.textContent = moods[daySeed % moods.length];
+            }
+
+            async loadTodayOverview() {
+                await Promise.allSettled([
+                    this.loadWeather(),
+                    this.loadCurrencyRate(),
+                    this.loadNews()
+                ]);
+                this.updateTraffic();
+                this.setDailyFun();
+            }
+
+            getFallbackNews() {
+                return [
+                    { title: 'Мэрия объявила новые сроки дорожного ремонта на ключевых магистралях Новосибирска', source: 'Город', url: '#', date: 'сегодня' },
+                    { title: 'В метро Новосибирска увеличили частоту поездов в вечерний час пик', source: 'Транспорт', url: '#', date: 'сегодня' },
+                    { title: 'На набережной стартовала серия бесплатных спортивных тренировок', source: 'Афиша', url: '#', date: 'сегодня' },
+                    { title: 'Синоптики обещают потепление и слабый ветер к выходным', source: 'Погода', url: '#', date: 'сегодня' },
+                    { title: 'В Советском районе открыли новую общественную зону отдыха', source: 'Город', url: '#', date: 'сегодня' },
+                    { title: 'Студенты НГУЭУ представили проект цифрового помощника для кампуса', source: 'Образование', url: '#', date: 'сегодня' },
+                    { title: 'На площади Ленина запланировали вечерний концерт местных групп', source: 'Культура', url: '#', date: 'сегодня' },
+                    { title: 'Власти уточнили график работы общественного транспорта в праздничные дни', source: 'Транспорт', url: '#', date: 'сегодня' },
+                    { title: 'В Академгородке расширяют сеть велодорожек к летнему сезону', source: 'Инфраструктура', url: '#', date: 'сегодня' },
+                    { title: 'В Новосибирске усилили контроль качества уборки снега во дворах', source: 'Город', url: '#', date: 'сегодня' },
+                    { title: 'На Михайловской набережной готовят гастрономический фестиваль', source: 'Афиша', url: '#', date: 'сегодня' },
+                    { title: 'Эксперты оценили рост спроса на аренду жилья рядом с вузами', source: 'Экономика', url: '#', date: 'сегодня' },
+                    { title: 'В городских поликлиниках запускают дополнительную запись онлайн', source: 'Здоровье', url: '#', date: 'сегодня' },
+                    { title: 'Новосибирские школьники взяли призовые места на олимпиаде по ИТ', source: 'Образование', url: '#', date: 'сегодня' },
+                    { title: 'В регионе обновили список площадок для массовых мероприятий', source: 'Регион', url: '#', date: 'сегодня' },
+                    { title: 'На левом берегу начали модернизацию остановочных павильонов', source: 'Транспорт', url: '#', date: 'сегодня' },
+                    { title: 'Волонтёры объявили набор на экологическую акцию в Заельцовском бору', source: 'Экология', url: '#', date: 'сегодня' },
+                    { title: 'В городе выросло число маршрутов, доступных для оплаты по QR-коду', source: 'Сервисы', url: '#', date: 'сегодня' },
+                    { title: 'Центр занятости сообщил о новых стажировках для студентов', source: 'Карьера', url: '#', date: 'сегодня' },
+                    { title: 'Новосибирский театр опубликовал расширенный репертуар на месяц', source: 'Культура', url: '#', date: 'сегодня' },
+                    { title: 'Гидрометцентр предупреждает о гололёде на утренних дорогах', source: 'Погода', url: '#', date: 'сегодня' },
+                    { title: 'Городская ИТ-конференция пройдёт с открытыми лекциями для начинающих', source: 'Технологии', url: '#', date: 'сегодня' },
+                    { title: 'Операторы кикшеринга расширили зоны парковки в центре', source: 'Мобильность', url: '#', date: 'сегодня' },
+                    { title: 'Власти анонсировали дополнительные рейсы электричек в пригород', source: 'Транспорт', url: '#', date: 'сегодня' },
+                    { title: 'В городских библиотеках пройдёт неделя открытых мастер-классов', source: 'Образование', url: '#', date: 'сегодня' }
+                ];
+            }
+
+            formatNewsDate(value) {
+                if (!value) return 'сегодня';
+                const parsed = new Date(value);
+                if (Number.isNaN(parsed.getTime())) return 'сегодня';
+                return parsed.toLocaleString('ru-RU', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+
+            renderNewsFeed() {
+                const listEl = this.dom.todayNewsList;
+                if (!listEl) return;
+
+                const items = this.newsItems.length ? this.newsItems : this.getFallbackNews();
+                const nextKey = JSON.stringify(items.map(item => `${item.title}|${item.source}|${item.url}|${item.date || ''}`));
+                if (nextKey === this.newsRenderKey) return;
+                this.newsRenderKey = nextKey;
+
+                const fragment = document.createDocumentFragment();
+                items.forEach(item => {
+                    const article = document.createElement('article');
+                    article.className = 'news-item';
+
+                    const link = document.createElement('a');
+                    link.href = item.url || '#';
+                    link.dataset.newsUrl = item.url || '#';
+                    link.textContent = item.title;
+
+                    const meta = document.createElement('small');
+                    meta.textContent = `${item.source || 'Лента дня'} · ${this.formatNewsDate(item.date)}`;
+
+                    article.appendChild(link);
+                    article.appendChild(meta);
+                    fragment.appendChild(article);
+                });
+
+                listEl.replaceChildren(fragment);
+            }
+
+            async loadNews() {
+                const feeds = [
+                    { url: 'https://ngs.ru/text/rss.xml', source: 'НГС' },
+                    { url: 'https://vn.ru/rss/', source: 'VN.ru' },
+                    { url: 'https://nsknews.info/feed', source: 'НСК Новости' },
+                    { url: 'https://yandex.ru/news/region/novosibirsk.rss', source: 'Яндекс Новости' }
+                ];
+
+            try {
+                const requests = feeds.map(async feed => {
+                    const feedUrl = encodeURIComponent(feed.url);
+                    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${feedUrl}&count=12`);
+                    if (!res.ok) return [];
+                    const data = await res.json();
+                    if (data?.status === 'error') return [];
+                    return (data?.items || []).map(item => ({
+                        title: item.title,
+                        source: item.author || feed.source,
+                        url: item.link,
+                        date: item.pubDate
+                    }));
+                });
+
+                const settled = await Promise.allSettled(requests);
+                const allItems = settled
+                    .filter(result => result.status === 'fulfilled')
+                    .flatMap(result => result.value)
+                    .filter(item => item?.title && item?.url);
+
+                const uniqueByTitle = [];
+                const seen = new Set();
+                allItems.forEach(item => {
+                    const key = item.title.trim().toLowerCase();
+                    if (seen.has(key)) return;
+                    seen.add(key);
+                    uniqueByTitle.push(item);
+                });
+
+                uniqueByTitle.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+                this.newsItems = uniqueByTitle.slice(0, 30);
+                if (!this.newsItems.length) {
+                    this.newsItems = this.getFallbackNews();
+                }
+            } catch (e) {
+                this.newsItems = this.getFallbackNews();
+            }
+
+                this.renderNewsFeed();
             }
 
             showLoadingSkeleton() {
@@ -1128,14 +1395,118 @@
                 document.getElementById('loginModal').addEventListener('click', (e) => {
                     if (e.target === document.getElementById('loginModal')) e.target.classList.remove('active');
                 });
+
+                document.getElementById('todayOpenBtn')?.addEventListener('click', () => {
+                    this.openTodayOverlay();
+                    this.loadTodayOverview();
+                });
+
+                const closeOverlay = () => this.closeTodayOverlay();
+
+                document.getElementById('todayOverlayClose')?.addEventListener('click', closeOverlay);
+                document.getElementById('todayOverlay')?.addEventListener('click', (e) => {
+                    if (e.target.id === 'todayOverlay') closeOverlay();
+                });
+
+                this.dom.todayNewsList?.addEventListener('click', (e) => {
+                    const link = e.target.closest('a[data-news-url]');
+                    if (!link) return;
+                    e.preventDefault();
+                    this.openNewsReader(link.dataset.newsUrl, link.textContent.trim());
+                });
+
+                this.dom.newsReaderClose?.addEventListener('click', () => this.closeNewsReader());
+                this.dom.newsReaderOverlay?.addEventListener('click', (e) => {
+                    if (e.target.id === 'newsReaderOverlay') this.closeNewsReader();
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key !== 'Escape') return;
+
+                    if (this.dom.newsReaderOverlay?.classList.contains('active')) {
+                        this.closeNewsReader();
+                        return;
+                    }
+
+                    if (document.getElementById('todayOverlay')?.classList.contains('active')) {
+                        closeOverlay();
+                    }
+                });
+            }
+
+            openNewsReader(url, title = 'Новость') {
+                const overlay = this.dom.newsReaderOverlay;
+                if (!overlay || !url) return;
+
+                if (this.newsCloseTimer) {
+                    clearTimeout(this.newsCloseTimer);
+                    this.newsCloseTimer = null;
+                }
+
+                if (this.dom.newsReaderTitle) this.dom.newsReaderTitle.textContent = title;
+                if (this.dom.newsReaderExternal) this.dom.newsReaderExternal.href = url;
+                if (this.dom.newsReaderFrame) this.dom.newsReaderFrame.src = url;
+
+                overlay.classList.remove('closing');
+                overlay.classList.add('active');
+                overlay.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+
+            closeNewsReader() {
+                const overlay = this.dom.newsReaderOverlay;
+                if (!overlay || !overlay.classList.contains('active')) return;
+
+                overlay.classList.add('closing');
+                overlay.setAttribute('aria-hidden', 'true');
+
+                if (this.newsCloseTimer) clearTimeout(this.newsCloseTimer);
+                this.newsCloseTimer = setTimeout(() => {
+                    overlay.classList.remove('active', 'closing');
+                    if (this.dom.newsReaderFrame) this.dom.newsReaderFrame.src = 'about:blank';
+                    if (!this.dom.todayOverlay?.classList.contains('active')) {
+                        document.body.style.overflow = '';
+                    }
+                }, this.overlayAnimationMs);
+            }
+
+            openTodayOverlay() {
+                const overlay = this.dom.todayOverlay;
+                if (!overlay) return;
+                if (this.overlayCloseTimer) {
+                    clearTimeout(this.overlayCloseTimer);
+                    this.overlayCloseTimer = null;
+                }
+                overlay.classList.remove('closing');
+                overlay.classList.add('active');
+                overlay.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+
+            closeTodayOverlay() {
+                const overlay = this.dom.todayOverlay;
+                if (!overlay || !overlay.classList.contains('active')) return;
+
+                overlay.classList.add('closing');
+                overlay.setAttribute('aria-hidden', 'true');
+                if (!this.dom.newsReaderOverlay?.classList.contains('active')) {
+                    document.body.style.overflow = '';
+                }
+
+                if (this.overlayCloseTimer) clearTimeout(this.overlayCloseTimer);
+                this.overlayCloseTimer = setTimeout(() => {
+                    overlay.classList.remove('active', 'closing');
+                }, this.overlayAnimationMs);
+            }
+
+            calculateAcademicWeek(date = new Date()) {
+                const diffDays = Math.floor((date - this.semesterStartDate) / (1000 * 60 * 60 * 24));
+                const weekNumber = Math.floor(diffDays / 7) + 1;
+                return (weekNumber % 2 === 1) ? '1' : '2';
             }
 
             initWeekIndicator() {
-                const start = new Date(2024, 8, 1);
-                const today = new Date();
-                const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-                const weekNumber = Math.floor(diffDays / 7) + 1;
-                const realWeek = (weekNumber % 2 === 1) ? '1' : '2';
+                const realWeek = this.calculateAcademicWeek();
 
                 document.getElementById('currentWeekLabel').innerText = `Сейчас ${realWeek}-я неделя`;
 
@@ -1176,16 +1547,14 @@
                     if (animate) this.animateCards();
                 } catch (e) {
                     console.error(e);
-                    this.renderer.showError('Ошибка подключения к расписанию. Попробуйте позже.');
+                    this.renderer.showError('Ошибка подключения к расписанию. Попробуйте открыть на другом устройстве.');
                 } finally {
                     container.classList.remove('transitioning');
                 }
             }
 
             getRealWeek() {
-                const start = new Date(2024, 8, 1);
-                const diffDays = Math.floor((new Date() - start) / (1000 * 60 * 60 * 24));
-                return (Math.floor(diffDays / 7) + 1) % 2 === 1 ? '1' : '2';
+                return this.calculateAcademicWeek();
             }
 
             showAdminPanel() {
