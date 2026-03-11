@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
 <!-- Yandex.Metrika counter (disabled on file://) -->
 <script type="text/javascript">
     if (location.protocol !== 'file:') {
@@ -81,6 +83,8 @@
 
         .header-content {
             max-width: 1400px;
+            width: 100%;
+
             margin: 0 auto;
             display: flex;
             flex-direction: column;
@@ -227,7 +231,11 @@
 
         /* ==================== БЛОК НЕДЕЛЬ ==================== */
         .week-section {
-            max-width: 1400px;
+
+        max-width: 1400px;
+        width: 100%;
+        padding: 0 16px;    
+
             margin: 1rem auto 0;
             padding: 0 1rem;
         }
@@ -665,7 +673,20 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+/* ===== MOBILE FIX ===== */
+img {
+    max-width: 100%;
+    height: auto;
+}
 
+table {
+    display: block;
+    overflow-x: auto;
+}
+
+* {
+    max-width: 100%;
+}
     </style>
 </head>
 <body data-theme="blue">
