@@ -677,7 +677,7 @@
             </div>
             <div class="menu-section">
                 <h3>Навигация</h3>
-                <a href="day.html" class="menu-btn" id="myDayPageMenuBtn"><i class="fas fa-user"></i> Личный кабинет</a>
+                <a href="day.html" class="menu-btn" id="myDayPageMenuBtn"><i class="fas fa-user"></i> Что-то новое</a>
             </div>
             <div class="menu-section">
                 <h3>Внешний вид</h3>
@@ -726,7 +726,7 @@
         <div class="modal-content">
             <h2><i class="fas fa-info-circle"></i> Добро пожаловать!</h2>
             <p>✨ Кнопка <strong>«Сегодня»</strong> в шапке плавно прокрутит страницу к текущему дню.</p>
-            <p>🔮 <strong>Личный кабинет</strong> <i class="fas fa-user"></i> скоро станет вашим персональным дневником.</p>
+            <p>🔮 <strong>Что-то новое</strong> <i class="fas fa-user"></i> Скоро станет доступно.</p>
             <button id="closeOnboarding">Понятно, поехали!</button>
         </div>
     </div>
@@ -887,7 +887,7 @@
                     });
                     const isToday = day.toLowerCase().startsWith(today);
                     html += `<div class="day-card ${isToday ? 'today' : ''}" data-day-name="${day}"><div class="day-card__header"><i class="fas fa-calendar-day"></i> ${day}</div>`;
-                    html += '<table class="lessons-table"><thead> ox-lock<th>Время</th><th>Дисциплина</th><th>Аудитория</th> </thead><tbody>';
+                    html += '<table class="lessons-table"><thead><th>Время</th><th>Дисциплина</th><th>Аудитория</th> </thead><tbody>';
                     lessons.forEach(lesson => {
                         const key = `${day}_${lesson.time}_${lesson.week}`;
                         const note = this.store.state.notes[key];
