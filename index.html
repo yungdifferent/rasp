@@ -67,15 +67,25 @@
 
         /* Floating Island Dock — три кнопки */
         .island-dock {
-            position: fixed; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 460px; height: 74px;
-            background: var(--island-bg); backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border-radius: 2.2rem; border: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 0.6rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            z-index: 9999; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        position: fixed; 
+        bottom: 0.5rem;   /* было 2.5rem */
+        left: 50%; 
+        transform: translateX(-50%);
+        width: 90%; 
+        max-width: 460px; 
+        height: 74px;
+        background: var(--island-bg); 
+        backdrop-filter: blur(25px) saturate(180%);
+        border-radius: 2.2rem; 
+        border: 1px solid var(--border);
+        display: flex; 
+        align-items: center; 
+        justify-content: space-between;
+        padding: 0 0.6rem; 
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        z-index: 9999; 
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
         .island-section { display: flex; align-items: center; justify-content: center; flex: 1; }
         .island-btn {
